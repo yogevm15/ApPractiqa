@@ -244,8 +244,15 @@ class UserDetailsActivity : AppCompatActivity() {
             options.withAspectRatio(1f,1f)
             options.setCropGridColor(Color.parseColor("#00000000"))
             options.setCropFrameColor(Color.parseColor("#00000000"))
+            val photoFile = createImageFile()
+            photoFile.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "com.example.android.fileprovider",
+                        it)
+            }
             if (uri != null) {
-                UCrop.of(uri,uri).withOptions(options).start(this)
+                UCrop.of(uri,photoFile.absoluteFile.toUri()).withOptions(options).start(this)
             }
         }
     }

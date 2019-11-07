@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.florent37:inline-activity-result:1.0.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/760e3320ca87e0a35ddfbdc9ac72c8f1/jetified-inline-activity-result-1.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/760e3320ca87e0a35ddfbdc9ac72c8f1/jetified-inline-activity-result-1.0.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.florent37/inline-activity-result/1.0.1/d2747931cd12b537685cf771ac5555b0646d721c/inline-activity-result-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
