@@ -76,7 +76,9 @@ class UserDetailsActivity : AppCompatActivity() {
             pickImage()
         }
 
-
+        back.setOnClickListener {
+            onBackPressed()
+        }
         container.doOnLayout {
             anim = MyAnimationDrawable(container.width)
             container.background = anim
@@ -84,6 +86,7 @@ class UserDetailsActivity : AppCompatActivity() {
             anim!!.setFrame(intent.getIntExtra("angle",0))
         }
         cont.setOnClickListener { view ->
+            cont.isEnabled = false
             anim?.setSpeed(30)
             if(password.text.toString().equals(confirm_password.text.toString()) && password.text.toString().length>6&&!age.text.toString().isEmpty()&&!first_name.text.toString().isEmpty()&&!last_name.text.toString().isEmpty()){
                 mAuth?.createUserWithEmailAndPassword(intent.getStringExtra("email"),password.text.toString())
@@ -126,7 +129,7 @@ class UserDetailsActivity : AppCompatActivity() {
 
                 }
                 else if(password.text.toString().length<7){
-                    snackbarError(view, "Password need to be 6 or more letters")
+                    snackbarError(view, "Password need to be 7 or more letters")
                 }
                 else{
                     snackbarError(view, "Passwords don't match...")
@@ -137,12 +140,12 @@ class UserDetailsActivity : AppCompatActivity() {
 
     }
 
-    override fun onBackPressed() {
-    }
+
     
     private fun snackbarError(view: View, errorString:String){
         Snackbar.make(view, errorString,Snackbar.LENGTH_LONG).setAction("Action",null).show()
         anim?.setSpeed(1)
+        cont.isEnabled = true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -193,18 +196,23 @@ class UserDetailsActivity : AppCompatActivity() {
             startActivityForResult(galleryIntent,GALLERY_REQUEST)
         }
     }
-    private fun putData(intent:Intent):Intent{
-        intent.putExtra("angle", anim?.getFrame())
-        intent.putExtra("first",first_name.text.toString())
-        intent.putExtra("last",last_name.text.toString())
-        intent.putExtra("age",age.text.toString())
-        intent.putExtra("pass",password.text.toString())
-        intent.putExtra("conf",confirm_password.text.toString())
-        intent.putExtra("email",intent.getStringExtra("email"))
+
+    override fun onBackPressed() {
+        val i = Intent(this,LoginActivity::class.java)
+        startActivity(i)
+    }
+    private fun putData(i:Intent):Intent{
+        i.putExtra("angle", anim?.getFrame())
+        i.putExtra("first",first_name.text.toString())
+        i.putExtra("last",last_name.text.toString())
+        i.putExtra("age",age.text.toString())
+        i.putExtra("pass",password.text.toString())
+        i.putExtra("conf",confirm_password.text.toString())
+        i.putExtra("email",intent.getStringExtra("email"))
         if(resultUri!=null){
-            intent.putExtra("image", resultUri)
+            i.putExtra("image", resultUri)
         }
-        return intent
+        return i
     }
     private fun retrieveData(){
         password.setText(intent.getStringExtra("pass"))
@@ -214,6 +222,7 @@ class UserDetailsActivity : AppCompatActivity() {
         first_name.setText(intent.getStringExtra("first"))
         if(intent.extras?.get("image")!=null){
             userLogo.setImageURI(intent.extras?.get("image") as Uri?)
+            resultUri = intent.extras?.get("image") as Uri?
         }
     }
     private fun cropCircle(srcUri:Uri?,dstUri:Uri){

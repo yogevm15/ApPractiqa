@@ -32,6 +32,7 @@
         app:layout_constraintVertical_bias="0.01"
         app:minTextSize="16sp" />
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         app:layout_constraintVertical_bias="0.1"
         android:id="@+id/linearLayout"
@@ -140,7 +141,6 @@
                     app:layout_constraintVertical_bias="0.1" />
             </LinearLayout>
         </LinearLayout>
-
         <EditText
             android:layout_margin="10dp"
             android:maxLength="2"
@@ -218,16 +218,34 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/sign_shape"
+            android:drawableLeft="@drawable/ic_arrow_back"
+            android:paddingRight="5dp"
+            android:gravity="center"
+            android:text="Back"
+            android:textColor="#00B0FF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintTop_toBottomOf="@+id/confirm_password" />
+        <Button
+            android:paddingLeft="5dp"
+            app:layout_constraintHorizontal_bias="0.9"
             android:id="@+id/cont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/sign_shape"
             android:gravity="center"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
+            android:drawableRight="@drawable/ic_arrow_forward"
             android:text="Continue"
-            android:textColor="#FFFFFFFF"
+            android:textColor="#00B0FF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

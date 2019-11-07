@@ -31,48 +31,65 @@
         app:minTextSize="16sp" />
 
     <LinearLayout
-        android:layout_margin="40dp"
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <Button
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textColor="#FFFFFFFF"
-            android:background="@drawable/sign_shape"
             android:id="@+id/join"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="100dp"
+            android:background="@drawable/sign_shape"
             android:text="Join Group"
-            android:textSize="30sp"
-            />
+            android:textColor="#FFFFFFFF"
+            android:textSize="30sp" />
 
 
-
-            <Button
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:id="@+id/create"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/sign_shape"
-                android:padding="5dp"
-                android:text="Create New Group"
-                android:textColor="#ffffff"
-                android:textSize="22sp" />
+        <Button
+            android:id="@+id/create"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/sign_shape"
+            android:padding="5dp"
+            android:text="Create New Group"
+            android:textColor="#ffffff"
+            android:textSize="22sp" />
 
 
     </LinearLayout>
+
+
+    <Button
+        android:paddingRight="5dp"
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="@drawable/sign_shape"
+        android:textColor="#00B0FF"
+        android:text="Sign Out"
+        android:drawableLeft="@drawable/ic_arrow_back"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
 
 

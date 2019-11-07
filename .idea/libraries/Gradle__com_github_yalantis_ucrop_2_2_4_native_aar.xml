@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.yalantis:ucrop:2.2.4-native@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b3079a23e7f83824122ccf4972d8db66/ucrop-2.2.4-native/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fe096d17f996f48bed59668fbe397fe1/ucrop-2.2.4-native/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b3079a23e7f83824122ccf4972d8db66/ucrop-2.2.4-native/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b3079a23e7f83824122ccf4972d8db66/ucrop-2.2.4-native/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fe096d17f996f48bed59668fbe397fe1/ucrop-2.2.4-native/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fe096d17f996f48bed59668fbe397fe1/ucrop-2.2.4-native/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.yalantis/ucrop/2.2.4-native/31e64490f96705656d54eb57b624cd3d2fb2c406/ucrop-2.2.4-native-javadoc.jar!/" />

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: co.revely:gradient:1.0.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9f881bfca7cc64b574736c97ab4a4433/gradient-1.0.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9f881bfca7cc64b574736c97ab4a4433/gradient-1.0.1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3f99ff79b1c18b8b7f9c351f0eee0aa4/gradient-1.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3f99ff79b1c18b8b7f9c351f0eee0aa4/gradient-1.0.1/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/co.revely/gradient/1.0.1/2eed9d65c01e8a94b5d47a32f026d79a29e34ea5/gradient-1.0.1-javadoc.jar!/" />

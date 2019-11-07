@@ -80,9 +80,17 @@ class LoginActivity : AppCompatActivity() {
 
 
     }
+
+    private fun snackbarError(view: View, errorString:String){
+        Snackbar.make(view, errorString,Snackbar.LENGTH_LONG).setAction("Action",null).show()
+        (container.background as MyAnimationDrawable).setSpeed(1)
+        login.isEnabled = true
+    }
+
     @SuppressLint("RestrictedApi")
     fun setLoginOnclick(){
         login.setOnClickListener { view ->
+            login.isEnabled = false
             (container.background as MyAnimationDrawable).setSpeed(30)
             try {
                 mAuth?.fetchSignInMethodsForEmail(username.text.toString())
@@ -90,6 +98,7 @@ class LoginActivity : AppCompatActivity() {
                         val signInMethods = result.signInMethods
                         if (signInMethods.toString().contains("password")) {
                            (container.background as MyAnimationDrawable).setSpeed(1)
+                            login.isEnabled = true
                             isBack = true
                             login.setText("Sign In")
                             back.visibility = View.VISIBLE
@@ -98,89 +107,85 @@ class LoginActivity : AppCompatActivity() {
                             password.visibility = View.VISIBLE
                             login.setOnClickListener { view ->
                                 (container.background as MyAnimationDrawable).setSpeed(30)
-                                mAuth?.signInWithEmailAndPassword(
-                                    username.text.toString(),
-                                    password.text.toString()
-                                )
-                                    ?.addOnCompleteListener(
-                                        this
-                                    ) { task ->
-                                        if (task.isSuccessful) {
+                                if(password.text.toString().length < 6){
+                                    snackbarError(
+                                        view,
+                                        "The password must be 7 or more letters!")
+                                }
+                                else {
+                                    mAuth?.signInWithEmailAndPassword(
+                                        username.text.toString(),
+                                        password.text.toString()
+                                    )
+                                        ?.addOnCompleteListener(
+                                            this
+                                        ) { task ->
+                                            if (task.isSuccessful) {
 
-                                            // Sign in success, update UI with the signed-in user's information
-                                            updateUi()
+                                                // Sign in success, update UI with the signed-in user's information
+                                                updateUi()
 
-                                        } else {
-                                           (container.background as MyAnimationDrawable).setSpeed(1)
-                                            // If sign in fails, display a message to the user.
-                                            if (task.exception?.message.toString().contains("The password is invalid")) {
-                                                Snackbar.make(
-                                                    view,
-                                                    "Invalid password...",
-                                                    Snackbar.LENGTH_LONG
-                                                ).setAction("Action", null).show()
-                                            } else if (task.exception?.message.toString().contains("We have blocked")) {
-                                                Snackbar.make(
-                                                    view,
-                                                    "You tried too much times...\nTry again later",
-                                                    Snackbar.LENGTH_LONG
-                                                ).setAction("Action", null).show()
                                             } else {
-                                                if (password.text.toString().length < 6 && !isEmailValid(
-                                                        username.text.toString()
+                                                // If sign in fails, display a message to the user.
+                                                if (task.exception?.message.toString().contains("The password is invalid")) {
+                                                    snackbarError(
+                                                        view,
+                                                        "Invalid password..."
+                                                    )
+                                                } else if (task.exception?.message.toString().contains(
+                                                        "We have blocked"
                                                     )
                                                 ) {
-                                                    Snackbar.make(
+                                                    snackbarError(
                                                         view,
-                                                        "The email address is badly formatted\nThe password must be 6 or more letters!",
-                                                        Snackbar.LENGTH_LONG
-                                                    ).setAction("Action", null).show()
-                                                } else if (!isEmailValid(username.text.toString())) {
-                                                    Snackbar.make(
-                                                        view,
-                                                        "The email address is badly formatted",
-                                                        Snackbar.LENGTH_LONG
-                                                    ).setAction("Action", null).show()
+                                                        "You tried too much times...\nTry again later"
+                                                    )
                                                 } else {
-                                                    Snackbar.make(
-                                                        view,
-                                                        "The password must be 6 or more letters!",
-                                                        Snackbar.LENGTH_LONG
-                                                    ).setAction("Action", null).show()
+                                                    if (password.text.toString().length < 6 && !isEmailValid(
+                                                            username.text.toString()
+                                                        )
+                                                    ) {
+                                                        snackbarError(
+                                                            view,
+                                                            "The email address is badly formatted\nThe password must be 6 or more letters!"
+                                                        )
+                                                    } else if (!isEmailValid(username.text.toString())) {
+                                                        snackbarError(
+                                                            view,
+                                                            "The email address is badly formatted"
+                                                        )
+                                                    } else {
+                                                        snackbarError(
+                                                            view,
+                                                            "The password must be 7 or more letters!"
+                                                        )
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                        // ...
-                                    }
+                                            // ...
+                                        }
+                                }
 
                             }
                         }
                     else{
                         if (!isEmailValid(username.text.toString())) {
-                           (container.background as MyAnimationDrawable).setSpeed(1)
-                            Snackbar.make(
+                            snackbarError(
                                 view,
-                                "The email address is badly formatted",
-                                Snackbar.LENGTH_LONG
-                            ).setAction("Action", null).show()
+                                "The email address is badly formatted")
                         } else {
                             updateUi()
                         }
                     }
                 }?.addOnFailureListener { exception ->
-                   (container.background as MyAnimationDrawable).setSpeed(1)
-                    Snackbar.make(view, "Try again later", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
+                    snackbarError(view, "The email address is badly formatted")
                 }
             }
             catch(e: Exception) {
-                Snackbar.make(
+                snackbarError(
                     view,
-                    "Email is empty",
-                    Snackbar.LENGTH_LONG
-                ).setAction("Action", null).show()
-               (container.background as MyAnimationDrawable).setSpeed(1)
+                    "Email is empty")
 
             }
 
@@ -192,23 +197,32 @@ class LoginActivity : AppCompatActivity() {
             if(mAuth.currentUser!!.displayName.isNullOrEmpty()) {
                 var i = Intent(this, UserDetailsActivity::class.java)
                 i.putExtra("email", mAuth.currentUser!!.email)
-                startActivity(i)
+                startActivityForResult(i,1)
+
             }
             else if(mAuth.currentUser!!.displayName == "withInfo"){
                 var i = Intent(this, CodeActivity::class.java)
-                startActivity(i)
+                startActivityForResult(i,1)
             }
             else{
                 var i = Intent(this, MainActivity::class.java)
-                startActivity(i)
+                startActivityForResult(i,1)
             }
+
         }
         else{
             var i = Intent(this, UserDetailsActivity::class.java)
             i.putExtra("email",username.text.toString())
-            startActivity(i)
+            startActivityForResult(i,1)
         }
 
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        login.isEnabled = true
+        (container.background as MyAnimationDrawable).setSpeed(1)
     }
     fun isEmailValid(email: String): Boolean {
         return emailRegex.matcher(email).matches()

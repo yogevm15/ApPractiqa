@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.yogile.appractiqa.R
 import kotlinx.android.synthetic.main.activity_code.*
 
@@ -21,10 +22,21 @@ class CodeActivity : AppCompatActivity() {
             anim.start()
         }
         join.setOnClickListener {
+            join.isEnabled = false
             startActivity(Intent(this, JoinActivity::class.java))
         }
         create.setOnClickListener {
+            create.isEnabled = false
             startActivity(Intent(this,CreateCodeActivity::class.java))
         }
+        logout.setOnClickListener {
+            logout.isEnabled = false
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this,LoginActivity::class.java))
+
+        }
+    }
+
+    override fun onBackPressed() {
     }
 }

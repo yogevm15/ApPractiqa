@@ -82,7 +82,7 @@
 
 
     <Button
-        android:textColor="#FFFFFFFF"
+        android:textColor="#00B0FF"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
         android:background="@drawable/sign_shape"
