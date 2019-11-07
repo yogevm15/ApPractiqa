@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "633857545601",
+    "firebase_url": "https://appractiqa.firebaseio.com",
+    "project_id": "appractiqa",
+    "storage_bucket": "appractiqa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633857545601:android:09c1972a036a995b144480",
+        "android_client_info": {
+          "package_name": "com.yogile.appractiqa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633857545601-hhlrpplkg6b4btobrb40d76kp9ud3lfq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yogile.appractiqa",
+            "certificate_hash": "7c04fdf18d002f34cf053ed993c578f9d6e66ce6"
+          }
+        },
+        {
+          "client_id": "633857545601-a1e7lfj7uoccssv8l5uv47tpo70qsjep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJSdU4TQJXrzU1ADhhEMC8NcE80xJwt5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633857545601-a1e7lfj7uoccssv8l5uv47tpo70qsjep.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
