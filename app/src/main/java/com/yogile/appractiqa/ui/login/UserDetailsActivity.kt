@@ -65,92 +65,25 @@ class UserDetailsActivity : AppCompatActivity() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         if(intent!=null){
             if(intent.action!=null){
-                password.setText(intent.getStringExtra("pass"))
-                confirm_password.setText(intent.getStringExtra("conf"))
-                age.setText(intent.getStringExtra("age"))
-                last_name.setText(intent.getStringExtra("last"))
-                first_name.setText(intent.getStringExtra("first"))
-                if(intent.extras?.get("image")!=null){
-                    userLogo.setImageURI(intent.extras?.get("image") as Uri?)
-                }
-                if(intent.action.equals(CAMERA_ACTION)) {
-                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                        // Create the File where the photo should go
-                        photoFile = createImageFile()
-                        // Continue only if the File was successfully created
-                        photoFile.also {
-                            val photoURI: Uri = FileProvider.getUriForFile(
-                                this,
-                                "com.example.android.fileprovider",
-                                it
-                            )
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                            takePictureIntent.resolveActivity(packageManager)?.also {
-                                startActivityForResult(takePictureIntent, CAMERA_REQUEST)
-                            }
-                        }
-                    }
-                }
-                else if(intent.action.equals(GALLERY_ACTION)){
-                    val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                    galleryIntent.type = "image/*"
-                    startActivityForResult(galleryIntent,GALLERY_REQUEST)
-                }
+                retrieveData()
+                doAction()
             }
         }
-        val login = findViewById<Button>(R.id.cont)
-        val layout = findViewById<ConstraintLayout>(R.id.container)
-        val img = findViewById<ImageView>(R.id.userLogo)
+
         val options = Options()
         options.setCircleDimmedLayer(true);
-        img.setOnClickListener {
-            val intentList = ArrayList<Intent>()
-            //Camera
-            val camIntent = Intent(CAMERA_ACTION)
-            camIntent.component = ComponentName(this,CAMERA_PACKEGE_NAME)
-            intentList.add(camIntent)
-            //Gallery
-            val galIntent = Intent(GALLERY_ACTION)
-            galIntent.component = ComponentName(this, GALLERY_PACKEGE_NAME)
-            intentList.add(galIntent)
-
-            if(intentList.isEmpty())
-                Toast.makeText(this, "No apps can perform this action", Toast.LENGTH_LONG).show();
-            else {
-                val chooserIntent = Intent.createChooser(intentList.removeAt(intentList.size-1), "Choose photo source");//this removes 'Always' & 'Only once' buttons
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(Array<Parcelable>(intentList.size) {
-                    intentList[it]
-                }))
-                camIntent.putExtra("angle", anim?.getFrame())
-                camIntent.putExtra("first",first_name.text.toString())
-                camIntent.putExtra("last",last_name.text.toString())
-                camIntent.putExtra("age",age.text.toString())
-                camIntent.putExtra("pass",password.text.toString())
-                camIntent.putExtra("conf",confirm_password.text.toString())
-                camIntent.putExtra("email",intent.getStringExtra("email"))
-                galIntent.putExtra("angle", anim?.getFrame())
-                galIntent.putExtra("first",first_name.text.toString())
-                galIntent.putExtra("last",last_name.text.toString())
-                galIntent.putExtra("age",age.text.toString())
-                galIntent.putExtra("pass",password.text.toString())
-                galIntent.putExtra("conf",confirm_password.text.toString())
-                galIntent.putExtra("email",intent.getStringExtra("email"))
-
-                if(resultUri!=null){
-                    camIntent.putExtra("image", resultUri)
-                    galIntent.putExtra("image", resultUri)
-                }
-                startActivityForResult(chooserIntent, IMAGE_REQUEST)
-            }
-
+        userLogo.setOnClickListener {
+            pickImage()
         }
-        layout.doOnLayout {
-            anim = MyAnimationDrawable(layout.width)
-            layout.background = anim
+
+
+        container.doOnLayout {
+            anim = MyAnimationDrawable(container.width)
+            container.background = anim
             anim!!.start()
             anim!!.setFrame(intent.getIntExtra("angle",0))
         }
-        login.setOnClickListener { view ->
+        cont.setOnClickListener { view ->
             anim?.setSpeed(30)
             if(password.text.toString().equals(confirm_password.text.toString()) && password.text.toString().length>6&&!age.text.toString().isEmpty()&&!first_name.text.toString().isEmpty()&&!last_name.text.toString().isEmpty()){
                 mAuth?.createUserWithEmailAndPassword(intent.getStringExtra("email"),password.text.toString())
@@ -162,12 +95,7 @@ class UserDetailsActivity : AppCompatActivity() {
                                 val uploadTask = resultUri?.let { imgRef.putFile(it) }
                                 val urlTask = uploadTask?.continueWithTask { task ->
                                     if (!task.isSuccessful) {
-                                        Snackbar.make(
-                                            view,
-                                            "Error while uploading your logo.\nTry again later",
-                                            Snackbar.LENGTH_LONG
-                                        ).setAction("Action", null).show()
-                                        anim?.setSpeed(1)
+                                        snackbarError(view, "Error while uploading your logo.\nTry again later")
                                     }
                                     imgRef.downloadUrl
                                 }?.addOnCompleteListener { task ->
@@ -175,12 +103,7 @@ class UserDetailsActivity : AppCompatActivity() {
                                         addToFireStore(task,view)
                                     }
                                     else {
-                                        Snackbar.make(
-                                            view,
-                                            "Error while uploading your logo.\nTry again later",
-                                            Snackbar.LENGTH_LONG
-                                        ).setAction("Action", null).show()
-                                        anim?.setSpeed(1)
+                                        snackbarError(view, "Error while uploading your logo.\nTry again later")
                                     }
                                 }
                             }
@@ -199,16 +122,15 @@ class UserDetailsActivity : AppCompatActivity() {
             }
             else{
                 if(age.text.toString().isEmpty()||first_name.text.toString().isEmpty()||last_name.text.toString().isEmpty()){
-                    Snackbar.make(view, "Some fields are missing...",Snackbar.LENGTH_LONG).setAction("Action",null).show()
+                    snackbarError(view, "Some fields are missing...")
 
                 }
                 else if(password.text.toString().length<7){
-                    Snackbar.make(view, "Password need to be 6 or more letters",Snackbar.LENGTH_LONG).setAction("Action",null).show()
+                    snackbarError(view, "Password need to be 6 or more letters")
                 }
                 else{
-                    Snackbar.make(view, "Passwords don't match...",Snackbar.LENGTH_LONG).setAction("Action",null).show()
+                    snackbarError(view, "Passwords don't match...")
                 }
-                anim?.setSpeed(1)
             }
 
         }
@@ -216,6 +138,11 @@ class UserDetailsActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+    }
+    
+    private fun snackbarError(view: View, errorString:String){
+        Snackbar.make(view, errorString,Snackbar.LENGTH_LONG).setAction("Action",null).show()
+        anim?.setSpeed(1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -226,24 +153,10 @@ class UserDetailsActivity : AppCompatActivity() {
         }
         if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
             val uri = photoFile.absoluteFile.toUri()
-            val options = UCrop.Options()
-            options.setCircleDimmedLayer(true)
-            options.setHideBottomControls(true)
-            options.withAspectRatio(1f,1f)
-            options.setCropGridColor(Color.parseColor("#00000000"))
-            options.setCropFrameColor(Color.parseColor("#00000000"))
-            if (uri != null) {
-                UCrop.of(uri,uri).withOptions(options).start(this)
-            }
+            cropCircle(uri,uri)
         }
         if(resultCode == Activity.RESULT_OK && requestCode == GALLERY_REQUEST){
             val uri = data?.data
-            val options = UCrop.Options()
-            options.setCircleDimmedLayer(true)
-            options.setHideBottomControls(true)
-            options.withAspectRatio(1f,1f)
-            options.setCropGridColor(Color.parseColor("#00000000"))
-            options.setCropFrameColor(Color.parseColor("#00000000"))
             val photoFile = createImageFile()
             photoFile.also {
                 val photoURI: Uri = FileProvider.getUriForFile(
@@ -251,9 +164,67 @@ class UserDetailsActivity : AppCompatActivity() {
                         "com.example.android.fileprovider",
                         it)
             }
-            if (uri != null) {
-                UCrop.of(uri,photoFile.absoluteFile.toUri()).withOptions(options).start(this)
+            cropCircle(uri,photoFile.absoluteFile.toUri())
+            
+        }
+    }
+    private fun doAction(){
+        if(intent.action.equals(CAMERA_ACTION)) {
+            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                // Create the File where the photo should go
+                photoFile = createImageFile()
+                // Continue only if the File was successfully created
+                photoFile.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                            this,
+                            "com.example.android.fileprovider",
+                            it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    takePictureIntent.resolveActivity(packageManager)?.also {
+                        startActivityForResult(takePictureIntent, CAMERA_REQUEST)
+                    }
+                }
             }
+        }
+        else if(intent.action.equals(GALLERY_ACTION)){
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            galleryIntent.type = "image/*"
+            startActivityForResult(galleryIntent,GALLERY_REQUEST)
+        }
+    }
+    private fun putData(intent:Intent):Intent{
+        intent.putExtra("angle", anim?.getFrame())
+        intent.putExtra("first",first_name.text.toString())
+        intent.putExtra("last",last_name.text.toString())
+        intent.putExtra("age",age.text.toString())
+        intent.putExtra("pass",password.text.toString())
+        intent.putExtra("conf",confirm_password.text.toString())
+        intent.putExtra("email",intent.getStringExtra("email"))
+        if(resultUri!=null){
+            intent.putExtra("image", resultUri)
+        }
+        return intent
+    }
+    private fun retrieveData(){
+        password.setText(intent.getStringExtra("pass"))
+        confirm_password.setText(intent.getStringExtra("conf"))
+        age.setText(intent.getStringExtra("age"))
+        last_name.setText(intent.getStringExtra("last"))
+        first_name.setText(intent.getStringExtra("first"))
+        if(intent.extras?.get("image")!=null){
+            userLogo.setImageURI(intent.extras?.get("image") as Uri?)
+        }
+    }
+    private fun cropCircle(srcUri:Uri?,dstUri:Uri){
+        val options = UCrop.Options()
+        options.setCircleDimmedLayer(true)
+        options.setHideBottomControls(true)
+        options.withAspectRatio(1f,1f)
+        options.setCropGridColor(Color.parseColor("#00000000"))
+        options.setCropFrameColor(Color.parseColor("#00000000"))
+        if (srcUri != null) {
+            UCrop.of(srcUri,dstUri).withOptions(options).start(this)
         }
     }
     lateinit var currentPhotoPath: String
@@ -303,24 +274,39 @@ class UserDetailsActivity : AppCompatActivity() {
                                 )
                             }
                             else{
-                                Snackbar.make(
-                                    view,
-                                    "Something went wrong.\nTry again later",
-                                    Snackbar.LENGTH_LONG
-                                ).setAction("Action", null).show()
-                                anim?.setSpeed(1)
+                                snackbarError(view, "Something went wrong.\nTry again later")
                             }
                         }
 
                 } else {
-                    Snackbar.make(
-                        view,
-                        "Error while creating your account.\nTry again later",
-                        Snackbar.LENGTH_LONG
-                    ).setAction("Action", null).show()
-                    anim?.setSpeed(1)
+                    snackbarError(view, "Error while creating your account.\nTry again later")
                 }
             }
+    }
+    private fun pickImage(){
+        val intentList = ArrayList<Intent>()
+        //Camera
+        var camIntent = Intent(CAMERA_ACTION)
+        camIntent.component = ComponentName(this,CAMERA_PACKEGE_NAME)
+        intentList.add(camIntent)
+        //Gallery
+        var galIntent = Intent(GALLERY_ACTION)
+        galIntent.component = ComponentName(this, GALLERY_PACKEGE_NAME)
+        intentList.add(galIntent)
+
+        if(intentList.isEmpty())
+            Toast.makeText(this, "No apps can perform this action", Toast.LENGTH_LONG).show();
+        else {
+            val chooserIntent = Intent.createChooser(intentList.removeAt(intentList.size-1), "Choose photo source");//this removes 'Always' & 'Only once' buttons
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(Array<Parcelable>(intentList.size) {
+                intentList[it]
+            }))
+            camIntent = putData(camIntent)
+            galIntent = putData(galIntent)
+
+
+            startActivityForResult(chooserIntent, IMAGE_REQUEST)
+        }
     }
 }
 
