@@ -92,4 +92,8 @@ class JoinActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this,CodeActivity::class.java))
+    }
 }
