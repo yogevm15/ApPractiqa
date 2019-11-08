@@ -52,7 +52,7 @@
             android:layout_marginBottom="100dp"
             android:background="@drawable/sign_shape"
             android:text="Join Group"
-            android:textColor="#FFFFFFFF"
+            android:textColor="#00B0FF"
             android:textSize="30sp" />
 
 
@@ -67,7 +67,7 @@
             android:background="@drawable/sign_shape"
             android:padding="5dp"
             android:text="Create New Group"
-            android:textColor="#ffffff"
+            android:textColor="#00B0FF"
             android:textSize="22sp" />
 
 

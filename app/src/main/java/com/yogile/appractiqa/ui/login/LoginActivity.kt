@@ -61,7 +61,6 @@ class LoginActivity : AppCompatActivity() {
         back.setOnClickListener{
             isBack = false
             login.setText("Continue")
-            username.setText("")
             back.visibility = View.INVISIBLE
             username.visibility = View.VISIBLE
             password.setText("")
@@ -234,7 +233,6 @@ class LoginActivity : AppCompatActivity() {
         if(isBack){
             isBack = false
             login.setText("Continue")
-            username.setText("")
             back.visibility = View.INVISIBLE
             username.visibility = View.VISIBLE
             password.setText("")
