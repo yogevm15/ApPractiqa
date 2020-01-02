@@ -105,6 +105,7 @@ class LoginActivity : AppCompatActivity() {
                             password.setText("")
                             password.visibility = View.VISIBLE
                             login.setOnClickListener { view ->
+                                login.isEnabled = false
                                 (container.background as MyAnimationDrawable).setSpeed(30)
                                 if(password.text.toString().length < 6){
                                     snackbarError(

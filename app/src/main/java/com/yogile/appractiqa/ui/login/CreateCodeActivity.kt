@@ -11,20 +11,32 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.yogile.appractiqa.MainActivity
 import com.yogile.appractiqa.R
 import kotlinx.android.synthetic.main.activity_code.*
 import kotlinx.android.synthetic.main.activity_code.container
 import kotlinx.android.synthetic.main.activity_create_code.*
+import java.util.*
+import kotlin.collections.HashMap
 
 class CreateCodeActivity : AppCompatActivity() {
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    val STRING_LENGTH = 6
+    private val charPool : List<Char> = ('A'..'Z') + ('0'..'9')
     private lateinit var anim: MyAnimationDrawable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_code)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        fab.setOnClickListener {
+            val randomString = (1..STRING_LENGTH)
+                .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
+                .map(charPool::get)
+                .joinToString("")
+            code.setText(randomString)
+        }
         container.doOnLayout {
             anim = MyAnimationDrawable(container.width)
             container.background = anim
@@ -47,6 +59,7 @@ class CreateCodeActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).setAction("Action", null).show()
                 anim.setSpeed(1)
+                UUID.randomUUID()
             }
             else{
                 db.collection("groups").document(code.text.toString()).get().addOnCompleteListener {task: Task<DocumentSnapshot> ->
@@ -60,8 +73,8 @@ class CreateCodeActivity : AppCompatActivity() {
                     }
                     else{
                         val groupD = HashMap<String,Any>()
-                        groupD.put("name",name.text.toString())
-                        groupD.put("admin", FirebaseAuth.getInstance().currentUser?.uid!!)
+                        groupD["name"] = name.text.toString()
+                        groupD["admin"] = FirebaseAuth.getInstance().currentUser?.uid!!
                         db.collection("groups").document(code.text.toString()).set(groupD).addOnCompleteListener { task ->
                             if(task.isSuccessful){
                                 val profileUpdates = UserProfileChangeRequest.Builder()
@@ -71,8 +84,23 @@ class CreateCodeActivity : AppCompatActivity() {
                                 FirebaseAuth.getInstance().currentUser?.updateProfile(profileUpdates)
                                     ?.addOnCompleteListener { task ->
                                         if (task.isSuccessful) {
-                                            startActivity(Intent(this,MainActivity::class.java))
-
+                                            val user = HashMap<String,Any>()
+                                            user["groupCode"] = code.text.toString()
+                                            user["isAdmin"] = true
+                                            db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user,
+                                                SetOptions.merge()).addOnCompleteListener { task ->
+                                                if(task.isSuccessful){
+                                                    startActivity(Intent(this,MainActivity::class.java))
+                                                }
+                                                else{
+                                                    Snackbar.make(
+                                                        view,
+                                                        "Something went wrong.\nTry again later",
+                                                        Snackbar.LENGTH_LONG
+                                                    ).setAction("Action", null).show()
+                                                    anim.setSpeed(1)
+                                                }
+                                            }
                                         }
                                         else{
                                             Snackbar.make(
@@ -97,9 +125,11 @@ class CreateCodeActivity : AppCompatActivity() {
                 }
             }
         }
+        back.setOnClickListener { onBackPressed() }
     }
 
     override fun onBackPressed() {
         startActivity(Intent(this,CodeActivity::class.java))
+        overridePendingTransition(R.anim.left_intent, R.anim.left_intent_out)
     }
 }

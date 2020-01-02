@@ -10,26 +10,6 @@
     android:fitsSystemWindows="true">
 
 
-    <me.grantland.widget.AutofitTextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/text_shape"
-        android:gravity="center"
-        android:maxLines="1"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:singleLine="true"
-        android:text="Create or Join???"
-        android:textColor="#ddffffff"
-        android:textSize="45sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"
-        app:minTextSize="16sp" />
-
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"

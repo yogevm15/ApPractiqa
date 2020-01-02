@@ -10,41 +10,17 @@
     android:fitsSystemWindows="true">
 
 
-    <me.grantland.widget.AutofitTextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/text_shape"
-        android:gravity="center"
-        android:maxLines="1"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:singleLine="true"
-        android:text="You almost there..."
-        android:textColor="#ddffffff"
-        android:textSize="45sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"
-        app:minTextSize="16sp" />
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        app:layout_constraintVertical_bias="0.1"
         android:id="@+id/linearLayout"
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/text_shape"
+        android:layout_margin="5dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="50dp">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -92,19 +68,20 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:layout_marginBottom="20dp"
                     android:id="@+id/first_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_shape"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/edit_shape"
                     android:drawablePadding="10dp"
                     android:hint="Enter your first name"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="10dp"
                     android:paddingBottom="10dp"
                     android:selectAllOnFocus="true"
                     android:textColor="#ffffffff"
@@ -123,12 +100,13 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_shape"
+                    android:background="@drawable/edit_shape"
                     android:drawablePadding="10dp"
                     android:hint="Enter your last name"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="10dp"
                     android:paddingBottom="10dp"
                     android:selectAllOnFocus="true"
                     android:textColor="#ffffffff"
@@ -141,20 +119,22 @@
                     app:layout_constraintVertical_bias="0.1" />
             </LinearLayout>
         </LinearLayout>
+
         <EditText
-            android:layout_margin="10dp"
-            android:maxLength="2"
             android:id="@+id/age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/text_shape"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_shape"
             android:drawableLeft="@drawable/ic_user"
             android:drawablePadding="10dp"
             android:hint="Enter your age"
             android:inputType="numberSigned"
+            android:maxLength="2"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
+            android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:selectAllOnFocus="true"
             android:textColor="#ffffffff"
@@ -163,16 +143,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.15"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintVertical_bias="0.15" />
 
         <EditText
-            android:layout_margin="10dp"
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/text_shape"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_shape"
             android:drawableLeft="@drawable/ic_lock"
             android:drawablePadding="10dp"
             android:hint="@string/prompt_password"
@@ -181,24 +161,25 @@
             android:inputType="textPassword"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
+            android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:selectAllOnFocus="true"
             android:textColor="#ffffffff"
             android:textColorHint="#aaffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-            app:layout_constraintVertical_bias="0.37"
-            app:layout_constraintHorizontal_bias="0.0" />
+            app:layout_constraintVertical_bias="0.37" />
 
         <EditText
-            android:layout_margin="10dp"
             android:id="@+id/confirm_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/text_shape"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_shape"
             android:drawableLeft="@drawable/ic_lock"
             android:drawablePadding="10dp"
             android:hint="Confirm password"
@@ -207,6 +188,7 @@
             android:inputType="textPassword"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
+            android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:selectAllOnFocus="true"
             android:textColor="#ffffffff"
@@ -214,8 +196,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.59"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintVertical_bias="0.59" />
 
         <Button
             android:id="@+id/back"
@@ -224,33 +206,34 @@
             android:layout_gravity="center"
             android:background="@drawable/sign_shape"
             android:drawableLeft="@drawable/ic_arrow_back"
-            android:paddingRight="5dp"
             android:gravity="center"
+            android:paddingRight="5dp"
             android:text="Back"
             android:textColor="#00B0FF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.9"
             app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintTop_toBottomOf="@+id/confirm_password" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/confirm_password"
+            app:layout_constraintVertical_bias="0.9" />
+
         <Button
-            android:paddingLeft="5dp"
-            app:layout_constraintHorizontal_bias="0.9"
             android:id="@+id/cont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/sign_shape"
-            android:gravity="center"
             android:drawableRight="@drawable/ic_arrow_forward"
+            android:gravity="center"
+            android:paddingLeft="5dp"
             android:text="Continue"
             android:textColor="#00B0FF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.9"
-            app:layout_constraintTop_toBottomOf="@+id/confirm_password" />
+            app:layout_constraintTop_toBottomOf="@+id/confirm_password"
+            app:layout_constraintVertical_bias="0.9" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

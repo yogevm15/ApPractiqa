@@ -11,12 +11,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.yogile.appractiqa.MainActivity
 import com.yogile.appractiqa.R
-import kotlinx.android.synthetic.main.activity_code.*
 import kotlinx.android.synthetic.main.activity_code.container
-import kotlinx.android.synthetic.main.activity_create_code.*
 import kotlinx.android.synthetic.main.activity_join.*
+import kotlinx.android.synthetic.main.activity_join.back
 import kotlinx.android.synthetic.main.activity_join.code
 import kotlinx.android.synthetic.main.activity_join.ok
 
@@ -64,7 +64,23 @@ class JoinActivity : AppCompatActivity() {
                                     FirebaseAuth.getInstance().currentUser?.updateProfile(profileUpdates)
                                         ?.addOnCompleteListener { task ->
                                             if (task.isSuccessful) {
-                                                startActivity(Intent(this, MainActivity::class.java))
+                                                val user = HashMap<String,Any>()
+                                                user["groupCode"] = code.text.toString()
+                                                user["isAdmin"] = true
+                                                db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user,
+                                                    SetOptions.merge()).addOnCompleteListener { task ->
+                                                    if(task.isSuccessful){
+                                                        startActivity(Intent(this,MainActivity::class.java))
+                                                    }
+                                                    else{
+                                                        Snackbar.make(
+                                                            view,
+                                                            "Something went wrong.\nTry again later",
+                                                            Snackbar.LENGTH_LONG
+                                                        ).setAction("Action", null).show()
+                                                        anim.setSpeed(1)
+                                                    }
+                                                }
 
                                             }
                                             else{
@@ -90,10 +106,12 @@ class JoinActivity : AppCompatActivity() {
                 }
             }
         }
+        back.setOnClickListener { onBackPressed() }
 
     }
 
     override fun onBackPressed() {
         startActivity(Intent(this,CodeActivity::class.java))
+        overridePendingTransition(R.anim.left_intent, R.anim.left_intent_out)
     }
 }

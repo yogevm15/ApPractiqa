@@ -200,6 +200,7 @@ class UserDetailsActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val i = Intent(this,LoginActivity::class.java)
         startActivity(i)
+        overridePendingTransition(R.anim.left_intent, R.anim.left_intent_out)
     }
     private fun putData(i:Intent):Intent{
         i.putExtra("angle", anim?.getFrame())

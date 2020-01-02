@@ -33,6 +33,7 @@ class CodeActivity : AppCompatActivity() {
             logout.isEnabled = false
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this,LoginActivity::class.java))
+            overridePendingTransition(R.anim.left_intent, R.anim.left_intent_out)
 
         }
     }
