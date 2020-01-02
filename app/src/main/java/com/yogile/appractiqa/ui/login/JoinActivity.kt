@@ -12,6 +12,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.yogile.appractiqa.LoadDataActivity
 import com.yogile.appractiqa.MainActivity
 import com.yogile.appractiqa.R
 import kotlinx.android.synthetic.main.activity_code.container
@@ -70,7 +71,7 @@ class JoinActivity : AppCompatActivity() {
                                                 db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user,
                                                     SetOptions.merge()).addOnCompleteListener { task ->
                                                     if(task.isSuccessful){
-                                                        startActivity(Intent(this,MainActivity::class.java))
+                                                        startActivity(Intent(this,LoadDataActivity::class.java))
                                                     }
                                                     else{
                                                         Snackbar.make(

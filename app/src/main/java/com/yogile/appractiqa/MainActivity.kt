@@ -20,13 +20,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.yogile.appractiqa.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.view.View
-import com.google.ads.mediation.admob.AdMobAdapter
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -36,7 +30,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         MobileAds.initialize(this,"ca-app-pub-3465726964424797~5262229495")
-
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
@@ -55,6 +48,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_settings, R.id.nav_send), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
@@ -78,6 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
+        userLogo.setImageURI(FirebaseAuth.getInstance().currentUser?.photoUrl)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
