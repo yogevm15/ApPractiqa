@@ -1,4 +1,4 @@
-package com.yogile.appractiqa.ui.gallery
+package com.yogile.appractiqa.ui.admin_settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.yogile.appractiqa.R
 
-class GalleryFragment : Fragment() {
+class AdminSettingsFragment : Fragment() {
 
-    private lateinit var galleryViewModel: GalleryViewModel
+    private lateinit var galleryViewModel: AdminSettingsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,11 +20,11 @@ class GalleryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         galleryViewModel =
-            ViewModelProviders.of(this).get(GalleryViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_gallery, container, false)
+            ViewModelProviders.of(this).get(AdminSettingsViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_admin_settings, container, false)
         val textView: TextView = root.findViewById(R.id.text_gallery)
         galleryViewModel.text.observe(this, Observer {
-            textView.text = it
+            textView.text = "settings"
         })
         return root
     }

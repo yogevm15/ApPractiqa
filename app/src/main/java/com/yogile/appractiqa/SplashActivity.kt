@@ -11,6 +11,7 @@ import com.yogile.appractiqa.ui.login.LoginActivity
 import com.yogile.appractiqa.ui.login.UserDetailsActivity
 var isAdmin = false
 var groupCode = ""
+var userName = ""
 class SplashActivity : AppCompatActivity() {
     private val mAuth: FirebaseAuth? = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {

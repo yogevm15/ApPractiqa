@@ -1,12 +1,8 @@
 package com.yogile.appractiqa
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnLayout
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -15,7 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.yogile.appractiqa.ui.login.MyAnimationDrawable
 
 import kotlinx.android.synthetic.main.activity_load_data.*
-import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.yogile.appractiqa.ui.login.LoginActivity
 
 
@@ -38,16 +33,21 @@ class LoadDataActivity : AppCompatActivity() {
     private fun getData(){
         FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).get().addOnCompleteListener {
             when {
-                it.result?.get("isAdmin")==null -> {
-                    FirebaseAuth.getInstance().signOut()
-                    val i = Intent(this, LoginActivity::class.java)
-                    startActivity(i)
-                }
+
                 it.isSuccessful -> {
-                    isAdmin = it.result?.get("isAdmin") as Boolean
-                    groupCode = it.result?.get("groupCode") as String
-                    val i = Intent(this, MainActivity::class.java)
-                    startActivity(i)
+                    if(it.result?.get("isAdmin")==null) {
+                        FirebaseAuth.getInstance().signOut()
+                        val i = Intent(this, LoginActivity::class.java)
+                        startActivity(i)
+                    }
+                    else {
+                        isAdmin = it.result?.get("isAdmin") as Boolean
+                        groupCode = it.result?.get("groupCode") as String
+                        userName = it.result?.get("name") as String
+                        println("123 $userName")
+                        val i = Intent(this, MainActivity::class.java)
+                        startActivity(i)
+                    }
                 }
                 else -> {
                     anim.setSpeed(1)

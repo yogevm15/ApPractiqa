@@ -1,10 +1,10 @@
-package com.yogile.appractiqa.ui.share
+package com.yogile.appractiqa.ui.users.tabs.users
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ShareViewModel : ViewModel() {
+class UsersTabViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is share Fragment"

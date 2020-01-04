@@ -13,12 +13,6 @@ import com.google.android.gms.ads.AdRequest
 import com.yogile.appractiqa.R
 import com.google.android.gms.ads.AdView
 
-
-
-
-
-
-
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
@@ -32,19 +26,12 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-
         val mAdView: AdView? = root.findViewById(R.id.adView)
         val adRequest = AdRequest.Builder().build()
         println(adRequest.contentUrl)
         mAdView?.loadAd(adRequest)
         val textView: TextView = root.findViewById(R.id.text_home)
-        val button: Button = root.findViewById(R.id.btn_ad)
-        button.setOnClickListener {
-            val mAdView: AdView? = root.findViewById(R.id.adView)
-            val adRequest = AdRequest.Builder().build()
-            println(adRequest.contentUrl)
-            mAdView?.loadAd(adRequest)
-        }
+
         homeViewModel.text.observe(this, Observer {
             textView.text = it
         })

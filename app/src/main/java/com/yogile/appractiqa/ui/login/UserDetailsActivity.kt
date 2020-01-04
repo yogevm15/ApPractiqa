@@ -1,12 +1,8 @@
 package com.yogile.appractiqa.ui.login
 
 import android.app.Activity
-import android.app.PendingIntent.getActivity
 import android.content.ComponentName
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -14,9 +10,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Parcelable
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.doOnLayout
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
@@ -31,11 +24,9 @@ import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_user_details.*
 import android.provider.MediaStore
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.yalantis.ucrop.UCrop
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

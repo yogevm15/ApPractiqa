@@ -13,10 +13,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.yogile.appractiqa.LoadDataActivity
-import com.yogile.appractiqa.MainActivity
 import com.yogile.appractiqa.R
 import kotlinx.android.synthetic.main.activity_code.container
-import kotlinx.android.synthetic.main.activity_join.*
 import kotlinx.android.synthetic.main.activity_join.back
 import kotlinx.android.synthetic.main.activity_join.code
 import kotlinx.android.synthetic.main.activity_join.ok
@@ -67,7 +65,7 @@ class JoinActivity : AppCompatActivity() {
                                             if (task.isSuccessful) {
                                                 val user = HashMap<String,Any>()
                                                 user["groupCode"] = code.text.toString()
-                                                user["isAdmin"] = true
+                                                user["isAdmin"] = false
                                                 db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user,
                                                     SetOptions.merge()).addOnCompleteListener { task ->
                                                     if(task.isSuccessful){

@@ -1,6 +1,5 @@
-package com.yogile.appractiqa.ui.send
+package com.yogile.appractiqa.ui.users.tabs.groups
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,23 +10,22 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.yogile.appractiqa.R
-import com.yogile.appractiqa.ui.login.LoginActivity
 
-class SendFragment : Fragment() {
+class GroupsTab : Fragment() {
 
-    private lateinit var sendViewModel: SendViewModel
+    private lateinit var groupsTabViewModel: GroupsTabViewModel
     private val mAuth: FirebaseAuth? = FirebaseAuth.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        sendViewModel =
-            ViewModelProviders.of(this).get(SendViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_send, container, false)
+        groupsTabViewModel =
+            ViewModelProviders.of(this).get(GroupsTabViewModel::class.java)
+        val root = inflater.inflate(R.layout.tab_groups, container, false)
         val textView: TextView = root.findViewById(R.id.text_send)
-        sendViewModel.text.observe(this, Observer {
-            textView.text = it
+        groupsTabViewModel.text.observe(this, Observer {
+            textView.text = "groups"
         })
 
         return root

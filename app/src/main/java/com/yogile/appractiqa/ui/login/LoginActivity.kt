@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.yogile.appractiqa.R
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
+import com.yogile.appractiqa.LoadDataActivity
 import com.yogile.appractiqa.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import java.lang.Exception
@@ -205,7 +206,7 @@ class LoginActivity : AppCompatActivity() {
                 startActivityForResult(i,1)
             }
             else{
-                var i = Intent(this, MainActivity::class.java)
+                var i = Intent(this, LoadDataActivity::class.java)
                 startActivityForResult(i,1)
             }
 
