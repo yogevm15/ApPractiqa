@@ -9,5 +9,6 @@ class User(doc:DocumentSnapshot) {
     var name = doc["name"] as String
     var logoUrl = doc["logo"] as String
     var age = doc["age"] as Long
+    var uid = doc.id
 }
 

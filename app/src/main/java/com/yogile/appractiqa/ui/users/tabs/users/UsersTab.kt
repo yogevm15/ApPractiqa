@@ -1,6 +1,7 @@
 package com.yogile.appractiqa.ui.users.tabs.users
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
@@ -20,6 +22,9 @@ import com.yogile.appractiqa.groupCode
 import com.yogile.appractiqa.ui.login.MyAnimationDrawable
 import kotlinx.android.synthetic.main.tab_users.*
 import kotlinx.android.synthetic.main.tab_users.view.*
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 
 
 class UsersTab : Fragment() {
@@ -37,7 +42,9 @@ class UsersTab : Fragment() {
 
         usersTabViewModel =
             ViewModelProviders.of(this).get(UsersTabViewModel::class.java)
+
         val root = inflater.inflate(R.layout.tab_users, container, false)
+
         root.container.doOnLayout {
             anim = MyAnimationDrawable(container!!.width)
             container.background = anim
@@ -87,8 +94,9 @@ class UsersTab : Fragment() {
             if(task2.isSuccessful){
                 activity?.runOnUiThread {
                     users.add(User(task2.result!!))
-                    (lv_users.adapter as UserArrayAdapter).notifyDataSetChanged()
+                    users.sortWith(compareBy<User>  {it.uid!= FirebaseAuth.getInstance().currentUser!!.uid}.thenBy{!it.isAdmin}.thenBy { it.name })
                 }
+
                 counter++
                 if (counter>= size){
                     pullToRefresh.isRefreshing = false
@@ -101,4 +109,6 @@ class UsersTab : Fragment() {
 
         }
     }
+
+
 }

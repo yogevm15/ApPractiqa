@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.yogile.appractiqa.R
 import com.yogile.appractiqa.TabPagerAdapter
@@ -45,6 +47,20 @@ class UsersFragment : Fragment() {
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
+                if(tab.position==0) {
+                    val fab = activity!!.findViewById<FloatingActionButton>(R.id.fab)
+                    val p = fab.layoutParams as CoordinatorLayout.LayoutParams
+                    p.anchorId = View.NO_ID
+                    fab.layoutParams = p
+                    fab.hide()
+                }
+                else{
+                    val fab = activity!!.findViewById<FloatingActionButton>(R.id.fab)
+                    val p = fab.layoutParams as CoordinatorLayout.LayoutParams
+                    p.anchorId = View.NO_ID
+                    fab.layoutParams = p
+                    fab.show()
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
