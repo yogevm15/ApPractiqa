@@ -76,31 +76,46 @@ class CreateCodeActivity : AppCompatActivity() {
                         groupD["admin"] = FirebaseAuth.getInstance().currentUser?.uid!!
                         db.collection("groups").document(code.text.toString()).set(groupD).addOnCompleteListener { task ->
                             if(task.isSuccessful){
-                                val profileUpdates = UserProfileChangeRequest.Builder()
-                                    .setDisplayName("withGroup")
-                                    .build()
 
-                                FirebaseAuth.getInstance().currentUser?.updateProfile(profileUpdates)
-                                    ?.addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            val user = HashMap<String,Any>()
-                                            user["groupCode"] = code.text.toString()
-                                            user["isAdmin"] = true
-                                            db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user,
-                                                SetOptions.merge()).addOnCompleteListener { task ->
-                                                if(task.isSuccessful){
-                                                    var i = Intent(this,LoadDataActivity::class.java)
-                                                    startActivity(i)
+                                val userD = HashMap<String,Any>()
+                                db.collection("groups").document(code.text.toString())
+                                    .collection("participants")
+                                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString()).set(userD).addOnCompleteListener {task ->
+                                        if(task.isSuccessful){
+                                            val profileUpdates = UserProfileChangeRequest.Builder()
+                                                .setDisplayName("withGroup")
+                                                .build()
+                                            FirebaseAuth.getInstance().currentUser?.updateProfile(profileUpdates)
+                                                ?.addOnCompleteListener { task ->
+                                                    if (task.isSuccessful) {
+                                                        val user = HashMap<String,Any>()
+                                                        user["groupCode"] = code.text.toString()
+                                                        user["isAdmin"] = true
+                                                        db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user,
+                                                            SetOptions.merge()).addOnCompleteListener { task ->
+                                                            if(task.isSuccessful){
+                                                                var i = Intent(this,LoadDataActivity::class.java)
+                                                                startActivity(i)
+                                                            }
+                                                            else{
+                                                                Snackbar.make(
+                                                                    view,
+                                                                    "Something went wrong.\nTry again later",
+                                                                    Snackbar.LENGTH_LONG
+                                                                ).setAction("Action", null).show()
+                                                                anim.setSpeed(1)
+                                                            }
+                                                        }
+                                                    }
+                                                    else{
+                                                        Snackbar.make(
+                                                            view,
+                                                            "Something went wrong.\nTry again later",
+                                                            Snackbar.LENGTH_LONG
+                                                        ).setAction("Action", null).show()
+                                                        anim.setSpeed(1)
+                                                    }
                                                 }
-                                                else{
-                                                    Snackbar.make(
-                                                        view,
-                                                        "Something went wrong.\nTry again later",
-                                                        Snackbar.LENGTH_LONG
-                                                    ).setAction("Action", null).show()
-                                                    anim.setSpeed(1)
-                                                }
-                                            }
                                         }
                                         else{
                                             Snackbar.make(
@@ -111,6 +126,7 @@ class CreateCodeActivity : AppCompatActivity() {
                                             anim.setSpeed(1)
                                         }
                                     }
+
                             }
                             else{
                                 Snackbar.make(

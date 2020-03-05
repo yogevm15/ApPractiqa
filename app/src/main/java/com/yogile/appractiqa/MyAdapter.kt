@@ -4,8 +4,7 @@ package com.yogile.appractiqa;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
-import com.yogile.appractiqa.ui.users.tabs.groups.GroupsTab;
+import com.yogile.appractiqa.ui.groups.tabs.groups.GroupsTab
 import com.yogile.appractiqa.ui.users.tabs.users.UsersTab;
 
 class TabPagerAdapter(fm: FragmentManager, private var tabCount: Int) :
