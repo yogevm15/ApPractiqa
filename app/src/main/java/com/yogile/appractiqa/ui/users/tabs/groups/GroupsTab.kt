@@ -12,6 +12,7 @@ import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -50,30 +51,11 @@ class GroupsTab : Fragment() {
             anim.start()
 
             groups = ArrayList()
-            lv_groups.adapter = GroupArrayAdapter(context!!, groups)
-            lv_groups.setOnItemLongClickListener { parent, view, position, id ->
-
-                if (groups[position].uid != FirebaseAuth.getInstance().currentUser!!.uid) {
-                    var alertDialog = AlertDialog.Builder(activity)
-                    var temp: Array<String>?
-                    temp = arrayOf("Remove Group", "Show Details")
-                    alertDialog.setItems(
-                        temp
-                    ) { dialog, which ->
-                        if (which == 0) {
-                            removeGroup(groups, position, view)
-                        }
-
-                    }
-
-
-
-                    alertDialog.create()
-                    alertDialog.show()
-                }
-
-                true
+            lv_groups.apply {
+                layoutManager = LinearLayoutManager(activity)
+                adapter = GroupArrayAdapter(activity, groups,anim)
             }
+
             pullToRefresh.isRefreshing = true
             getData()
             pullToRefresh.setOnRefreshListener {
@@ -119,23 +101,7 @@ class GroupsTab : Fragment() {
 
 
 
-    private fun removeGroup(groups:ArrayList<Group>, position: Int, view: View){
-        FirebaseFirestore.getInstance().collection("groups").document(groupCode).collection("groups")
-            .document(groups[position].uid).delete().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    activity?.runOnUiThread {
-                        groups.remove(groups[position])
-                        groups.sortWith(compareBy { it.name })
-                        (lv_groups.adapter as GroupArrayAdapter).notifyDataSetChanged()
-                        anim.setSpeed(1)
 
-                    }
-                } else {
-                    removeGroup(groups,position,view)
-
-                }
-            }
-    }
     
 
 }

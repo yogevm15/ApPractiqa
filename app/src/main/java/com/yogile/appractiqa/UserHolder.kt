@@ -25,7 +25,7 @@ class UserViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 
     fun bind(user: User) {
         mName?.text = user.name
-        Picasso.get().load(user.logoUrl).placeholder(R.drawable.user)
+        Picasso.get().load(user.logoUrl).placeholder(R.drawable.user).fit()
             .into(mLogo)
         if(user.isAdmin){
             mAdmin?.visibility = View.VISIBLE
