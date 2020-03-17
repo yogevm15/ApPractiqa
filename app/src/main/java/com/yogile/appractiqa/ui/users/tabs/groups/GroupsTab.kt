@@ -46,9 +46,7 @@ class GroupsTab : Fragment() {
         val root = inflater.inflate(R.layout.tab_groups, container, false)
 
         root.container.doOnLayout {
-            anim = MyAnimationDrawable(container!!.width)
-            container.background = anim
-            anim.start()
+            anim = container!!.background as (MyAnimationDrawable)
 
             groups = ArrayList()
             lv_groups.apply {

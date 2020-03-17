@@ -12,6 +12,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.functions.FirebaseFunctions
 import com.yogile.appractiqa.LoadDataActivity
 import com.yogile.appractiqa.R
 import kotlinx.android.synthetic.main.activity_code.container
@@ -51,56 +52,40 @@ class JoinActivity : AppCompatActivity() {
                         ).setAction("Action", null).show()
                         anim.setSpeed(1)
                     } else {
-                        val userD = HashMap<String,Any>()
-                        db.collection("groups").document(code.text.toString())
-                            .collection("participants")
-                            .document(FirebaseAuth.getInstance().currentUser?.uid.toString()).set(userD).addOnCompleteListener {task ->
-                                if (task.isSuccessful){
-                                    val profileUpdates = UserProfileChangeRequest.Builder()
-                                        .setDisplayName("withGroup")
-                                        .build()
-
-                                    FirebaseAuth.getInstance().currentUser?.updateProfile(profileUpdates)
-                                        ?.addOnCompleteListener { task ->
-                                            if (task.isSuccessful) {
-                                                val user = HashMap<String,Any>()
-                                                user["groupCode"] = code.text.toString()
-                                                user["isAdmin"] = false
-                                                db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user,
-                                                    SetOptions.merge()).addOnCompleteListener { task ->
-                                                    if(task.isSuccessful){
-                                                        startActivity(Intent(this,LoadDataActivity::class.java))
-                                                    }
-                                                    else{
-                                                        Snackbar.make(
-                                                            view,
-                                                            "Something went wrong.\nTry again later",
-                                                            Snackbar.LENGTH_LONG
-                                                        ).setAction("Action", null).show()
-                                                        anim.setSpeed(1)
-                                                    }
-                                                }
-
-                                            }
-                                            else{
-                                                Snackbar.make(
-                                                    view,
-                                                    "Something went wrong.\nTry again later",
-                                                    Snackbar.LENGTH_LONG
-                                                ).setAction("Action", null).show()
-                                                anim.setSpeed(1)
-                                            }
-                                        }
-                                }
-                                else{
-                                    Snackbar.make(
-                                        view,
-                                        "Something went wrong.\nTry again later",
-                                        Snackbar.LENGTH_LONG
-                                    ).setAction("Action", null).show()
-                                    anim.setSpeed(1)
+                        val groupD = HashMap<String,Any>()
+                        groupD["admin"] = FirebaseAuth.getInstance().currentUser?.uid!!
+                        groupD["code"] = code.text.toString()
+                        groupD["uid"] = FirebaseAuth.getInstance().currentUser?.uid.toString()
+                        FirebaseFunctions.getInstance("europe-west2").getHttpsCallable("joinGroup").call(groupD).addOnCompleteListener {
+                            if(it.isSuccessful) {
+                                val profileUpdates = UserProfileChangeRequest.Builder()
+                                    .setDisplayName("withGroup")
+                                    .build()
+                                FirebaseAuth.getInstance()
+                                    .currentUser?.updateProfile(profileUpdates)!!.addOnCompleteListener {
+                                    if(it.isSuccessful){
+                                        var i = Intent(this,LoadDataActivity::class.java)
+                                        startActivity(i)
+                                    }
+                                    else{
+                                        Snackbar.make(
+                                            view,
+                                            "Something went wrong.\nTry again later",
+                                            Snackbar.LENGTH_LONG
+                                        ).setAction("Action", null).show()
+                                        anim.setSpeed(1)
+                                    }
                                 }
                             }
+                            else{
+                                Snackbar.make(
+                                    view,
+                                    "Something went wrong.\nTry again later",
+                                    Snackbar.LENGTH_LONG
+                                ).setAction("Action", null).show()
+                                anim.setSpeed(1)
+                            }
+                        }
                     }
                 }
             }

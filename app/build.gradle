@@ -65,5 +65,5 @@ dependencies {
     implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.1'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
-
+    implementation 'com.google.firebase:firebase-functions:19.0.2'
 }

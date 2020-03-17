@@ -50,7 +50,7 @@ class UsersTab : Fragment() {
             anim = MyAnimationDrawable(container!!.width)
             container.background = anim
             anim.start()
-
+            anim.setSpeed(30)
             users = ArrayList()
             lv_users.apply {
                 layoutManager = LinearLayoutManager(activity)

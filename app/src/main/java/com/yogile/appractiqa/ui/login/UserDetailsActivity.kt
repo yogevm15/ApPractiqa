@@ -15,7 +15,6 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.yalantis.ucrop.UCrop.Options
@@ -26,6 +25,7 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import com.google.firebase.functions.FirebaseFunctions
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.io.IOException
@@ -248,7 +248,6 @@ class UserDetailsActivity : AppCompatActivity() {
         if (task1 != null) {
             downloadUri = task1.result.toString()
         }
-        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
         val userD = HashMap<String, Any>()
         userD.put(
             "name",
@@ -256,33 +255,33 @@ class UserDetailsActivity : AppCompatActivity() {
         )
         userD.put("logo", downloadUri)
         userD.put("age", age.text.toString().toInt())
-        db.collection("users")
-            .document(mAuth?.currentUser?.uid.toString()).set(userD)
-            .addOnCompleteListener {task ->
-                if (task.isSuccessful) {
-                    val profileUpdates = UserProfileChangeRequest.Builder()
-                        .setDisplayName("withInfo")
-                        .build()
+        userD.put("uid",FirebaseAuth.getInstance().currentUser!!.uid.toString())
+        FirebaseFunctions.getInstance("europe-west2").getHttpsCallable("createUser").call(userD).addOnCompleteListener {
+            if (it.isSuccessful) {
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName("withInfo")
+                    .build()
 
-                    mAuth?.currentUser?.updateProfile(profileUpdates)
-                        ?.addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                startActivity(
-                                    Intent(
-                                        this,
-                                        CodeActivity::class.java
-                                    )
+                mAuth?.currentUser?.updateProfile(profileUpdates)
+                    ?.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            startActivity(
+                                Intent(
+                                    this,
+                                    CodeActivity::class.java
                                 )
-                            }
-                            else{
-                                snackbarError(view, "Something went wrong.\nTry again later")
-                            }
+                            )
+                        } else {
+                            snackbarError(view, "Something went wrong.\nTry again later")
                         }
-
-                } else {
-                    snackbarError(view, "Error while creating your account.\nTry again later")
-                }
+                    }
             }
+            else {
+                println("123error: " + it.exception.toString())
+                snackbarError(view, "Error while creating your account.\nTry again later")
+            }
+        }
+
     }
     private fun pickImage(){
         val intentList = ArrayList<Intent>()

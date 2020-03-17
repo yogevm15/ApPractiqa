@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.functions.FirebaseFunctions
 import com.squareup.picasso.Picasso
 import com.yogile.appractiqa.ui.login.MyAnimationDrawable
 import kotlinx.android.synthetic.main.tab_users.*
@@ -35,7 +36,7 @@ class UserArrayAdapter(private val dataSource: ArrayList<User>,private val activ
                             temp
                         ) { dialog, which ->
                             if (which == 0) {
-                                removeUserGroupCode(dataSource, position, view)
+                                removeUserFromPart(position)
                             } else if (which == 1) {
                                 removeAdmin(dataSource, position, view)
                             }
@@ -47,7 +48,7 @@ class UserArrayAdapter(private val dataSource: ArrayList<User>,private val activ
                             temp,
                             DialogInterface.OnClickListener { dialog, which ->
                                 if (which == 0) {
-                                    removeUserGroupCode(dataSource, position, view)
+                                    removeUserFromPart(position)
                                 } else if (which == 1) {
                                     addAdmin(dataSource, position, view)
                                 }
@@ -61,7 +62,7 @@ class UserArrayAdapter(private val dataSource: ArrayList<User>,private val activ
                             temp,
                             DialogInterface.OnClickListener { dialog, which ->
                                 if (which == 0) {
-                                    removeUserGroupCode(dataSource, position, view)
+                                    removeUserFromPart(position)
                                 } else if (which == 1) {
                                 }
 
@@ -150,39 +151,26 @@ class UserArrayAdapter(private val dataSource: ArrayList<User>,private val activ
             }
     }
 
-    private fun removeUserFromPart(users:ArrayList<User>,position: Int,view: View){
-        FirebaseFirestore.getInstance().collection("groups").document(groupCode).collection("participants")
-            .document(users[position].uid).delete().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    activity?.runOnUiThread {
-                        users.remove(users[position])
-                        users.sortWith(compareBy<User> { it.uid != FirebaseAuth.getInstance().currentUser!!.uid }.thenBy { !it.isAdmin }.thenBy { it.name })
-                        notifyDataSetChanged()
-                        anim.setSpeed(1)
-
-                    }
-                } else {
-                    removeUserFromPart(users,position,view)
+    private fun removeUserFromPart(position: Int){
+        anim.setSpeed(30)
+        val data = hashMapOf(
+            "group" to groupCode,
+            "uid" to dataSource[position].uid
+        )
+        FirebaseFunctions.getInstance("europe-west2").getHttpsCallable("deleteParticipant").call(data).addOnCompleteListener {
+            if(it.isSuccessful){
+                activity?.runOnUiThread {
+                    dataSource.remove(dataSource[position])
+                    dataSource.sortWith(compareBy<User> { it.uid != FirebaseAuth.getInstance().currentUser!!.uid }.thenBy { !it.isAdmin }.thenBy { it.name })
+                    notifyDataSetChanged()
+                    anim.setSpeed(1)
 
                 }
             }
+        }
     }
 
-    private fun removeUserGroupCode(users:ArrayList<User>,position: Int,view: View){
-        val user = HashMap<String, Any>()
-        user["groupCode"] = ""
-        FirebaseFirestore.getInstance().collection("users")
-            .document(users[position].uid).set(
-                user,
-                SetOptions.merge()
-            ).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    removeUserFromPart(users,position,view)
-                } else {
-                    removeUserGroupCode(users,position,view)
-                }
-            }
-    }
+
 
 
 

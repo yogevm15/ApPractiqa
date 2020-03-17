@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.functions.FirebaseFunctions
 import com.squareup.picasso.Picasso
 import com.yogile.appractiqa.ui.login.MyAnimationDrawable
 import kotlinx.android.synthetic.main.tab_groups.*
@@ -58,21 +59,24 @@ class GroupArrayAdapter(private val activity: FragmentActivity?,
     }
 
     private fun removeGroup(groups:ArrayList<Group>, position: Int){
-        FirebaseFirestore.getInstance().collection("groups").document(groupCode).collection("groups")
-            .document(groups[position].uid).delete().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    activity?.runOnUiThread {
-                        groups.remove(groups[position])
-                        groups.sortWith(compareBy { it.name })
-                        notifyDataSetChanged()
-                        anim.setSpeed(1)
-
-                    }
-                } else {
-                    removeGroup(groups,position)
-
+        anim.setSpeed(30)
+        val data = hashMapOf(
+            "group" to groupCode,
+            "innerGroup" to groups[position].uid
+        )
+        FirebaseFunctions.getInstance("europe-west2").getHttpsCallable("deleteInnerGroup").call(data).addOnCompleteListener {
+            if(it.isSuccessful){
+                activity?.runOnUiThread {
+                    groups.remove(groups[position])
+                    groups.sortWith(compareBy { it.name })
+                    notifyDataSetChanged()
+                    anim.setSpeed(1)
                 }
             }
+            else{
+                println("1234: " + it.exception.toString())
+            }
+        }
     }
 
 
